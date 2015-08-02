@@ -1,6 +1,11 @@
 
 
 /* CSS declarations go here */
+
+table { width: 100%; }
+td, th { width: 33%; text-align: center; }
+
+
 body {
   font-family: sans-serif;
   background-color: #315481;

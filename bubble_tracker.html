@@ -1,0 +1,73 @@
+
+
+<head>
+
+  <title>Bubble Car Mileage</title>
+
+</head>
+
+ 
+
+<body>
+
+
+
+  <div class="container">
+
+    <header>
+
+      <h1>Bubble Car Mileage</h1>
+
+	  {{> loginButtons}}
+	  
+	  {{#if currentUser}}
+
+      <form class="new-recharge">
+
+        <input type="number" name="mileage" placeholder="What's the mileage?" />
+        <input type="number" name="bars" placeholder="How many bars remaining?"/>
+        <input type="submit" value="Add recharge"/>
+
+      </form>
+      
+      {{/if}}
+
+    </header>
+ 
+
+    <table>
+	    <thead>
+		    <tr><th>Date</th><th>Mileage</th><th>Bars Remain</th></tr>
+	    </thead>
+	    <tbody>
+
+      {{#each recharges}}
+
+        {{> recharge}}
+
+      {{/each}}
+
+    </tbody>
+    </table>
+
+  </div>
+
+</body>
+
+ 
+
+<template name="recharge">
+
+    <tr>
+	    <td>{{shortDate createdAt}}</td>
+	    <td>{{mileage}}</td>
+	    <td>{{bars}}</td>
+    </tr>
+
+
+
+    <!--<span class="text">Recharged at  miles, {{bars}} bars remaining, by {{username}}.</span>-->
+
+
+</template>
+

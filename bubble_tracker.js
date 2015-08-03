@@ -25,32 +25,37 @@ if (Meteor.isClient) {
   Template.body.helpers({
 
     recharges: function () {
-
-	// Show newest tasks at the top
-
-      //return Recharges.find({}, {sort: {createdAt: -1}});
-      
-      var chchcharges = Recharges.find({}, {sort: {createdAt: -1}});
-      
-      //do something to math it out here.
-      
-      //for each row, I want to know how many miles since the last row
-      //and how many bars used since the last charge (which is USUALLY going to be 16 bars, but is it always?)
-      //plus also what about some summary data? total miles driven, total KWH used, average mi/kwh, average range
+		// Show charging information in the order added
+		return Recharges.find({}, {sort: {createdAt: -1}});
+    },        
         
-     
-      
-      return chchcharges;
-
-    },
-      
-        /*
-        //this works for returning static variables
-        chargingdata: [ 
-            {totalDistance:5000, totalKWH:500, averageMPKWH:5,range:50}
-        ]*/
-      
     chargingdata: function() {
+
+		//first loop through the chargest to get the total KWH used
+    	var totalKWH = 0;
+		Recharges.find({}, {sort: {mileage: -1}}).forEach(function(e) {
+			totalKWH += e.barsUsed;
+    	});
+    	
+    	//then get the first and last miles recorded
+    	//subtract to get total mileage
+    	var firstMile = Recharges.find({}, {sort: {createdAt: 1}, limit: 1}).fetch().pop();
+    	var lastMile = Recharges.find({}, {sort: {createdAt: -1}, limit: 1}).fetch().pop();
+    	var totalDistance = (lastMile.mileage - firstMile.mileage);
+    	
+    	//average miles per KWH, rounded
+    	averageMPKWH = parseInt(totalDistance/totalKWH,10);
+    	
+    	//range is that average times the total number of bars
+    	range = averageMPKWH * 16;
+    
+    return [ 
+            {totalDistance:totalDistance, totalKWH:totalKWH, averageMPKWH:averageMPKWH,range:range}
+        ]
+
+  }
+      
+    /*chargingdata: function() {
       
         var chchcharges = Recharges.find({}, {sort: {createdAt: -1}});
     
@@ -58,22 +63,16 @@ if (Meteor.isClient) {
         
         var totalmiles = 0;
         
-        /*
-        chchcharges looks something like this:
-        [
-        {mileage: 10000, bars: 5, createdAt: 'big long date string', owner: 'somefancystring', username: 'elaine'},
-        {mileage: 10100, bars: 1, createdAt: 'big long date string', owner: 'somefancystring', username: 'chad'}
-        ]
-        */
+        
         
         //$.each(chchcharges,function(key,value) {
             $.each(chchcharges,function(k,v) {
                 if(k == 'mileage') { totalmiles += v; };
             });
         //});
-        /*_.each(chchcharges,function() {
-            totalmiles += mileage;
-        });*/
+        //_.each(chchcharges,function() {
+        //    totalmiles += mileage;
+        //});
     
     //total distance = last mileage - first mileage
     //total KWH = sum of (foreach row, fullkwh - bars)
@@ -86,7 +85,7 @@ if (Meteor.isClient) {
     
         //return chargingdata;
       
-  }
+  }*/
 
   });
 
@@ -105,20 +104,21 @@ if (Meteor.isClient) {
       // Get value from form element
 
       var mileage = event.target.mileage.value;
-      var bars = event.target.bars.value;
+      var barsRemaining = event.target.barsRemaining.value;
+      var barsUsed = 16 - barsRemaining;
 
  
 
       // Insert a task into the collection
 
-      Meteor.call("addRecharge", mileage, bars);
+      Meteor.call("addRecharge", mileage, barsRemaining, barsUsed);
 
  
 
       // Clear form
 
       event.target.mileage.value = "";
-      event.target.bars.value = "";
+      event.target.barsRemaining.value = "";
 
     }
 
@@ -167,7 +167,7 @@ if (Meteor.isClient) {
 
   Meteor.methods({
 
-  addRecharge: function (mileage,bars) {
+  addRecharge: function (mileage,barsRemaining,barsUsed) {
 
     // Make sure the user is logged in before inserting a task
 
@@ -183,7 +183,8 @@ if (Meteor.isClient) {
 
       mileage: mileage,
         
-        bars: bars,
+        barsRemaining: barsRemaining,
+        barsUsed: barsUsed,
 
       createdAt: new Date(),
 

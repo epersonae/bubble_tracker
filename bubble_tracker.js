@@ -39,6 +39,7 @@ if (Meteor.isClient) {
     	
     	//then get the first and last miles recorded
     	//subtract to get total mileage
+    	//see also http://stackoverflow.com/questions/28938013/how-to-find-second-last-record-from-collection-with-meteor-js
     	var firstMile = Recharges.find({}, {sort: {createdAt: 1}, limit: 1}).fetch().pop();
     	var lastMile = Recharges.find({}, {sort: {createdAt: -1}, limit: 1}).fetch().pop();
     	var totalDistance = (lastMile.mileage - firstMile.mileage);
@@ -54,38 +55,6 @@ if (Meteor.isClient) {
         ]
 
   }
-      
-    /*chargingdata: function() {
-      
-        var chchcharges = Recharges.find({}, {sort: {createdAt: -1}});
-    
-        var fullkwh = 16;
-        
-        var totalmiles = 0;
-        
-        
-        
-        //$.each(chchcharges,function(key,value) {
-            $.each(chchcharges,function(k,v) {
-                if(k == 'mileage') { totalmiles += v; };
-            });
-        //});
-        //_.each(chchcharges,function() {
-        //    totalmiles += mileage;
-        //});
-    
-    //total distance = last mileage - first mileage
-    //total KWH = sum of (foreach row, fullkwh - bars)
-    //average milesPerKWH = total distance/total KWH
-    //range per charge = average milesPerKWH * fullkwh
-    
-       // return [ {totalDistance:5000, totalKWH:500, averageMPKWH:5,range:50} ];
-        
-        return [ {totalDistance:totalmiles, totalKWH:500, averageMPKWH:5,range:50}];
-    
-        //return chargingdata;
-      
-  }*/
 
   });
 
@@ -105,6 +74,7 @@ if (Meteor.isClient) {
 
       var mileage = event.target.mileage.value;
       var barsRemaining = event.target.barsRemaining.value;
+      //bars used is the more valuable number, but harder to see on the dial.
       var barsUsed = 16 - barsRemaining;
 
  
@@ -131,27 +101,7 @@ if (Meteor.isClient) {
   });  
    
 
-  /*Template.task.events({
 
-    "click .toggle-checked": function () {
-
-      // Set the checked property to the opposite of its current value
-
-      Tasks.update(this._id, {
-
-        $set: {checked: ! this.checked}
-
-      });
-
-    },
-
-    "click .delete": function () {
-
-      Tasks.remove(this._id);
-
-    }
-
-  });*/
   
   /* from Hackpad: https://meteor.hackpad.com/Meteor-Cookbook-Using-Dates-and-Times-qSQCGFc06gH#:h=4.-Formatting-Dates-for-Displa */
       Template.registerHelper("shortDate", function(date) {

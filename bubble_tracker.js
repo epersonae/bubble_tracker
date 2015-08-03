@@ -37,11 +37,56 @@ if (Meteor.isClient) {
       //for each row, I want to know how many miles since the last row
       //and how many bars used since the last charge (which is USUALLY going to be 16 bars, but is it always?)
       //plus also what about some summary data? total miles driven, total KWH used, average mi/kwh, average range
+        
      
       
       return chchcharges;
 
-    }
+    },
+      
+        /*
+        //this works for returning static variables
+        chargingdata: [ 
+            {totalDistance:5000, totalKWH:500, averageMPKWH:5,range:50}
+        ]*/
+      
+    chargingdata: function() {
+      
+        var chchcharges = Recharges.find({}, {sort: {createdAt: -1}});
+    
+        var fullkwh = 16;
+        
+        var totalmiles = 0;
+        
+        /*
+        chchcharges looks something like this:
+        [
+        {mileage: 10000, bars: 5, createdAt: 'big long date string', owner: 'somefancystring', username: 'elaine'},
+        {mileage: 10100, bars: 1, createdAt: 'big long date string', owner: 'somefancystring', username: 'chad'}
+        ]
+        */
+        
+        //$.each(chchcharges,function(key,value) {
+            $.each(chchcharges,function(k,v) {
+                if(k == 'mileage') { totalmiles += v; };
+            });
+        //});
+        /*_.each(chchcharges,function() {
+            totalmiles += mileage;
+        });*/
+    
+    //total distance = last mileage - first mileage
+    //total KWH = sum of (foreach row, fullkwh - bars)
+    //average milesPerKWH = total distance/total KWH
+    //range per charge = average milesPerKWH * fullkwh
+    
+       // return [ {totalDistance:5000, totalKWH:500, averageMPKWH:5,range:50} ];
+        
+        return [ {totalDistance:totalmiles, totalKWH:500, averageMPKWH:5,range:50}];
+    
+        //return chargingdata;
+      
+  }
 
   });
 

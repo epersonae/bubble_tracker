@@ -60,6 +60,15 @@
 
     </tbody>
     </table>
+    
+    <h2>To-Do List for this app</h2>
+    <ul>
+	    <li>Restrict logins so it's just me &amp; Chad</li>
+	    <li>Switch to Google for auth?</li>
+	    <li>Allow manual date entry</li>
+	    <li>Allow entry editing (typo fixing!)</li>
+	    <li>Allow for partial charges</li>
+    </ul>
 
   </div>
 
@@ -67,28 +76,21 @@
 
  
 <template name="summary">
-      <ul>
-          <li>Total distance traveled: {{totalDistance}}</li>
-          <li>Total electricity used: {{totalKWH}} KWH</li>
-      <li>Average miles per KWH: {{averageMPKWH}}</li>
-            <li>Range per full charge (approx): {{range}}</li>
-      </ul>
+    <ul>
+    	<li>Total distance traveled: {{totalDistance}}</li>
+		<li>Total electricity used: {{totalKWH}} KWH</li>
+		<li>Average miles per KWH: {{averageMPKWH}}</li>
+        <li>Range per full charge (approx): {{range}}</li>
+    </ul>
 </template>
 
 
 
 <template name="recharge">
-
     <tr>
 	    <td>{{shortDate createdAt}}</td>
 	    <td>{{mileage}}</td>
 	    <td>{{barsUsed}}</td>
     </tr>
-
-
-
-    <!--<span class="text">Recharged at  miles, {{bars}} bars remaining, by {{username}}.</span>-->
-
-
 </template>
 

@@ -24,8 +24,8 @@
 
       <form class="new-recharge">
 
-        <input type="number" name="mileage" placeholder="What's the mileage?" />
-        <input type="number" name="barsRemaining" placeholder="How many bars remaining?"/>
+        <input type="number" name="mileage" placeholder="Mileage" />
+        <input type="number" name="barsRemaining" placeholder="Bars remaining"/>
         <input type="submit" value="Add recharge"/>
 
       </form>
@@ -40,7 +40,8 @@
 
       {{/each}} 
       
- 
+ <section>
+	 <h2>Charging Details</h2>
 
     <table>
 	    <thead>
@@ -60,17 +61,19 @@
 
     </tbody>
     </table>
+ </section>
+ 
+ <section>
     
     <h2>To-Do List for this app</h2>
     <ul>
-	    <li>Better design (this look is from the sample to-do app)</li>
-	    <li>Restrict logins so it's just me &amp; Chad</li>
-	    <li>Switch to Google for auth?</li>
+	    <li>Authentication improvements</li>
 	    <li>Allow manual date entry</li>
 	    <li>Allow entry editing (typo fixing!)</li>
 	    <li>Allow for partial charges</li>
 	    <li>Android app?</li>
     </ul>
+ </section>
 
   </div>
 
@@ -78,12 +81,22 @@
 
  
 <template name="summary">
-    <ul>
-    	<li>Total distance traveled: {{totalDistance}}</li>
-		<li>Total electricity used: {{totalKWH}} KWH</li>
-		<li>Average miles per KWH: {{averageMPKWH}}</li>
-        <li>Range per full charge (approx): {{range}}</li>
-    </ul>
+<section>
+<h2>Summary</h2>
+    <dl>
+    	<dt>Total distance traveled</dt>
+    	<dd>{{totalDistance}}</dd>
+		
+		<dt>Total electricity used</dt>
+		<dd>{{totalKWH}} KWH</dd>
+		
+		<dt>Average miles per KWH</dt>
+		<dd>{{averageMPKWH}}</dd>
+        
+        <dt>Range per full charge (approx)</dt>
+        <dd>{{range}}</dd>
+    </dl>
+</section>
 </template>
 
 
